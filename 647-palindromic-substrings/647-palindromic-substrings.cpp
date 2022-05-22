@@ -1,27 +1,23 @@
 class Solution {
 public:
-    int countSubstrings(string s) {
-        int cnt = 0;
+    //Use two pointers approach
+    int countSubstrings(string s) 
+    {
+        int start, end, count=0, n=s.size();
         
-        //generate substrings and check for palindrome
-        for(int i=0; i<s.size(); i++){
-            string str = "";
-            for(int j=i; j<s.size(); j++){
-                str += s[j];
-                if(isPalindrome(str))
-                    cnt++;
-            }
+        //iterate over whole string
+        for(int i=0; i<n; i++)
+        {
+            //for odd length palindrome substring
+            start=i; end=i;
+            while(start>=0 && end<n && s[start--]==s[end++]) count++;
+            
+            //for even length palindrome substring
+            start=i-1; end=i;
+            while(start>=0 && end<n && s[start--]==s[end++]) count++;
         }
         
-        return cnt;
-    }
-    
-    bool isPalindrome(string str){
-        int l = 0, r = str.size()-1;
-        while(l<=r){
-            if(str[l++] != str[r--])
-                return false;
-        }
-        return true;
+        //return no. of palindrome substrings
+        return count;
     }
 };
