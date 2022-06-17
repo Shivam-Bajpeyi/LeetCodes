@@ -4,13 +4,15 @@ public:
         //traverse all over the  matrix and make complete row & col -1 for element = 0 wherever we find
         int m = matrix.size(), n = matrix[0].size();
         
+        //make row[] & col[] to mark which row or col has 0 value
+        vector<int> row(m, -1);
+        vector<int> col(n, -1);
+        
         for(int i=0; i<m; i++){
             for(int j=0; j<n; j++){
                 if(matrix[i][j]==0){
-                    for(int k=0; k<n; k++)  //entire col = 0
-                        if(matrix[i][k] != 0)   matrix[i][k] = 'a';
-                    for(int k= 0; k<m; k++) //entire row = 0
-                        if(matrix[k][j] != 0)   matrix[k][j] = 'a';
+                    row[i] = 0;
+                    col[j] = 0;
                 }
             }
         }
@@ -18,7 +20,7 @@ public:
         // -1 -> 0
         for(int i=0; i<m; i++){
             for(int j=0; j<n; j++){
-                if(matrix[i][j]=='a')
+                if(row[i]==0 || col[j] == 0)
                     matrix[i][j] = 0;
             }
         }
