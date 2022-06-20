@@ -1,5 +1,4 @@
-//DP- memoization
-
+//DP_tabulation (bottom- up approach)
 class Solution {
 public:
     int minPathSum(vector<vector<int>>& grid) {
@@ -7,21 +6,32 @@ public:
         int m = grid[0].size();
         
         vector<vector<int>> dp(n, vector<int>(m, -1)); //step1
-        return f(n-1, m-1, grid, dp);
-    }
-    
-    int f(int i, int j, vector<vector<int>>& grid, vector<vector<int>> &dp){
-        if(i==0 && j==0)    //return value if reached to goal 
-            return grid[i][j];
         
-        if(i<0 || j<0)  //don't consider this path so return a max value
-            return 1e6;
+        //build dp from values calculated initially
+        for(int i=0; i<n; i++){
+            for(int j=0; j<m; j++){
+                if(i==0 && j==0) dp[i][j]= grid[0][0];
+                
+                else{
+                    int up = grid[i][j];            //go up, consider current value in sum
+                    if(i>0)  
+                        up+= dp[i-1][j];       //base cases
+                    else 
+                        up+= 1e6;
+                    
+                    int left = grid[i][j];         //go left, consider current value in sum
+                    if(j>0) 
+                        left += dp[i][j-1];   //base case
+                    else
+                        left += 1e6;
+                    
+                    cout<<min(up, left)<<endl;
+                    dp[i][j] = min(up, left);
+                
+                }
+            }
+        }
         
-        if(dp[i][j] != -1) return dp[i][j]; //step2
-        
-        int up   =  grid[i][j] + f(i-1, j, grid, dp);
-        int left =  grid[i][j] + f(i, j-1, grid, dp);
-        
-        return dp[i][j] = min(up, left);   //take min sum(step3)
+        return dp[n-1][m-1];
     }
 };
