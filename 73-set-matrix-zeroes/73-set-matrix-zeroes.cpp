@@ -1,30 +1,30 @@
 class Solution {
 public:
     void setZeroes(vector<vector<int>>& matrix) {
-        //traverse all over the  matrix and make complete row & col -1 for element = 0 wherever we find
         int m = matrix.size(), n = matrix[0].size();
         
-        //make row[] & col[] to mark which row or col has 0 value
-        vector<int> row(m, -1);
-        vector<int> col(n, -1);
-        
+        //step1- wherever we find 0, convert all its row and col elements to 'A' (except 0)
         for(int i=0; i<m; i++){
             for(int j=0; j<n; j++){
-                if(matrix[i][j]==0){
-                    row[i] = 0;
-                    col[j] = 0;
+                if(matrix[i][j] == 0){
+                    for(int k=0; k<m; k++)  //make row A
+                        if(matrix[k][j] != 0)
+                            matrix[k][j] = 'A';
+                    
+                    for(int k=0; k<n; k++)  //make col A
+                        if(matrix[i][k] != 0)
+                            matrix[i][k] = 'A';
                 }
+                    
             }
         }
         
-        // -1 -> 0
+        //step2- convert back A to 0
         for(int i=0; i<m; i++){
             for(int j=0; j<n; j++){
-                if(row[i]==0 || col[j] == 0)
+                if(matrix[i][j]== 'A')
                     matrix[i][j] = 0;
             }
         }
-        
-        // return matrix;
     }
 };
