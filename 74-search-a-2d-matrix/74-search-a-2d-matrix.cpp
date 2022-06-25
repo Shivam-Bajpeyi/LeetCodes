@@ -11,11 +11,11 @@ public:
             if(matrix[i][j]== target)
                 return true;
             
-            else if(matrix[i][j] < target){ //target is not in this row, go to next row
-                i++; 
+            else if(matrix[i][j] > target){ //target is not in this row, go to next row
+                j--; 
             }
             else{
-                j--;
+                i++;
             }
         }
         
