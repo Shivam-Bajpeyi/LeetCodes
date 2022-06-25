@@ -1,23 +1,26 @@
+//Binary search solution
 class Solution {
 public:
     bool searchMatrix(vector<vector<int>>& matrix, int target) {
-        int n = matrix.size();
-        int m = matrix[0].size();
+        int m = matrix.size(), n = matrix[0].size();
         
-        int j = m-1;    //last col
-        int i=0;
+        //low = 1st element, high = last element 
+        //since the matrix is sorted so treat it as a 1d array and BS to find target
+        int low = 0;
+        int high = m*n-1;
         
-        while(i<n && j>=0){
-            if(matrix[i][j]== target)
-                return true;
+        while(low<= high){
+            int mid = (low+high)>>1;
             
-            else if(matrix[i][j] > target){ //target is not in this row, go to next row
-                j--; 
-            }
-            else{
-                i++;
-            }
-        }
+            // cout<< mid <<" "<<matrix[mid/n][mid%n]<<endl;
+            
+            if(matrix[mid/n][mid%n]== target) return true;
+            
+            else if(matrix[mid/n][mid%n] > target)    //check in left half, high = mid-1
+                high = mid-1;
+            else            
+                low = mid+1;       //check in right half, low= mid+1;
+        }   
         
         return false;
     }
