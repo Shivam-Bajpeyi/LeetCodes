@@ -1,23 +1,21 @@
 class Solution {
 public:
     int majorityElement(vector<int>& nums) {
-        sort(nums.begin(), nums.end());
+        int count = 0;
+        int element = nums[0];
         
-        int n = nums.size();
-        if(n==1)
-            return nums[0];
-        
-        int count = 1;
-        for(int i=1; i<n; i++){
-            if(nums[i]==nums[i-1])
+        for(auto it: nums){
+           if(count==0)    //whenever count becomes 0, pick up a new element
+                element = it;
+            
+            //keep a counter
+            if(element == it)  
                 count++;
             else
-                count = 1;
-            
-            if(count> n/2)
-                return nums[i];
+                count--; 
         }
-        
-        return -1;
+            
+        return element;
+    
     }
 };
