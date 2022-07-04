@@ -1,24 +1,22 @@
 class Solution {
 public:
     int lengthOfLongestSubstring(string s) {
-        //sliding window approach
-        int length = 0;
-        int start = 0, i=0;
+        //hashmap to store latest index of char 
+        unordered_map<char, int> mpp;
         
-        //map will store current index of every character in string
-        vector <int> map(256, -1);
-        
-        //iterate over string to find longest substring
-        for(i = 0; i<s.size(); i++)
-        {
-            if(map[s[i]] != -1)   //if this char occurs previouslu
-                start = max(start, map[s[i]]+1);  //update start point
+        int l=0; //starting point
+        int mxLen = 0;
+        for(int i=0; i<s.size(); i++){
+            if(mpp.find(s[i]) != mpp.end()){    //duplicate found in substr
+                //update string starting point
+                l = max(l, mpp[s[i]]+1);
+            }
             
-            map[s[i]] = i;      //update index of char every time
-            length = max(length, i-start+1);    //update length
-                
+            //calc mxLen
+            mxLen = max(mxLen, i-l+1);
+            mpp[s[i]] = i;  //update index
         }
         
-        return length;
+        return mxLen;
     }
 };
