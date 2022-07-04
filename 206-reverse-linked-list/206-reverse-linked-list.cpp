@@ -11,24 +11,24 @@
 class Solution {
 public:
     ListNode* reverseList(ListNode* head) {
-        if(head == NULL || head->next ==NULL)
+        if(head==NULL || head->next==NULL)
             return head;
         
-        //step-1: make 3 pointers
+        //change link 1->2 to 1<-2
         ListNode* prev = NULL;
-        ListNode* cur= head;
-        ListNode*nxt = cur->next;
+        ListNode* curr = head;
+        ListNode* nxt = head->next;
         
-        //step-2: iterate over LL and make connections backward
-        while(cur != NULL){
-            cur->next = prev; //made connection backward
-            //setup pointers at new positions
-            prev =cur;
-            cur = nxt;
+        while(curr){
+            curr->next = prev;  //1<-2
+            
+            //update pointers
+            prev = curr;
+            curr = nxt;
             if(nxt) nxt = nxt->next;
         }
         
-        //in the last cur will be at NULL and prev at last node so return last node as head
+        //curr is at NULL, prev at last node
         return prev;
     }
 };
