@@ -11,34 +11,26 @@
 class Solution {
 public:
     ListNode* removeNthFromEnd(ListNode* head, int n) {
-        if(head->next ==NULL)
-            return NULL;
+        //using 2 pointers
+        ListNode* start = new ListNode();
+        start->next = head; //if they ask to delete head (n= number of nodes)
         
-        //2 pointers approach
-        //step-1: count total nodes
-        ListNode* curr = head;
-        int cnt = 0;
-        while(curr){
-            cnt++;
-            curr = curr->next;
+        //2 pointers
+        ListNode* fast = start;
+        ListNode* slow = start;
+        for(int i=1; i<=n; i++) //move fast n steps ahead
+            fast = fast->next;
+        
+        //move them together untill fast reaches the last node
+        while(fast->next)
+        {
+            fast = fast->next;
+            slow = slow->next;
         }
         
-        //(5- 2) = k = 3
-        //trverse k nodes and delete the node
-        int k = cnt - n;
-        curr = head;
+        //slow reached at prev node of that we have to delete
+        slow->next = slow->next->next;
         
-        //when head we need to delete: k = 5-5
-        if(k==0)    //first node
-            return head->next;
-        
-        while(k){ // 3 2 1 
-            if(k==1)
-                curr->next = curr->next->next;
-            k--;
-            curr= curr->next;
-        }
-        
-        return head;
+        return start->next;
     }
 };
