@@ -18,10 +18,17 @@ public:
         ListNode* curr = head;  //used for traverse
         
         int carry = 0;
-        while(l1 || l2){
+        while(l1 || l2 || carry){
             int sum = 0;
-            if(l1) sum += l1->val;
-            if(l2) sum += l2->val;
+            if(l1){
+                sum += l1->val;
+                l1 = l1->next;
+            }
+            
+            if(l2){
+                sum += l2->val;
+                l2 = l2->next;
+            } 
             
             //add carry
             if(carry){
@@ -32,11 +39,9 @@ public:
             curr = curr->next;
             
             carry = sum/10;   //update add
-            if(l1) l1 = l1->next;
-            if(l2) l2 = l2->next;
+            
         }
-        
-        if(carry) curr->next = new ListNode(carry);
+
         return head->next;
     }
 };
