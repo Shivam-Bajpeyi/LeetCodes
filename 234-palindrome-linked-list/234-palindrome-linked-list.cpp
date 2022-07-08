@@ -11,22 +11,47 @@
 class Solution {
 public:
     bool isPalindrome(ListNode* head) {
-        vector<int> nums;
+        //middle + reverse + palindrome
+        if(head->next ==NULL)
+            return head;
         
-        //push node values to nums
-        while(head){
-            nums.push_back(head->val);
-            head = head->next;
+        //step-1: reach tp the middle node
+        ListNode* slow = head;
+        ListNode* fast = head;
+        
+        while(fast->next && fast->next->next){
+            fast = fast->next->next;
+            slow = slow->next;
         }
-            
         
-        //check using 2 pointers
-        int i= 0, j= nums.size()-1;
-        while(i<j){
-            if(nums[i++] != nums[j--])
+        //step-2: slow is at middle node, reverse from slow+1 to last node
+        slow->next = reverseLL(slow->next);
+        slow = slow->next;  //set slow
+        
+        //step-3: compare slow & head to check palindrome
+        while(slow!= NULL){
+            // cout<<head->val << " "<< slow->val<<endl;
+            if(slow->val != head->val)
                 return false;
+            
+            slow = slow->next;
+            head = head->next;
         }
         
         return true;
+    }
+    
+    ListNode* reverseLL(ListNode* head){
+        ListNode* prev = NULL;
+        ListNode* curr = head;
+        
+        while(curr){
+            ListNode* nxt = curr->next;
+            curr->next = prev;
+            prev = curr;
+            curr = nxt;   
+        }
+        
+        return prev;
     }
 };
