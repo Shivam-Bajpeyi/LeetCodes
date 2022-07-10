@@ -17,24 +17,43 @@ public:
 class Solution {
 public:
     Node* copyRandomList(Node* head) {
-        //store original node and corresponsing copy node(with same val) in hashamap
-        unordered_map<Node*, Node*> mpp;
-        Node* ptr = head;
+        if(head==NULL)
+            return head;
         
-        while(ptr){
-            mpp[ptr] = new Node(ptr->val);
-            ptr = ptr->next;
+        //step-1: make copy node and place it next of every node
+        Node* curr = head;
+        while(curr){
+            Node* node = new Node(curr->val);
+            Node* nxt = curr->next;
+            curr->next = node;
+            node->next = nxt;
+            curr = nxt;
         }
         
-        //assign next and random to copy nodes
-        ptr = head;
-        while(ptr){
-            mpp[ptr]->next = mpp[ptr->next];
-            mpp[ptr]->random = mpp[ptr->random];
-            ptr = ptr->next;
+        //step-2: assign random pointer curr->next->random = curr->random->next
+        curr = head;
+        while(curr){
+            if(curr->random ==NULL)
+                curr->next->random = NULL;
+            else
+                curr->next->random = curr->random->next;
+            
+            curr = curr->next->next;
         }
         
-        //return copy node of head
-        return mpp[head];   
+        //step-3: extarct copy list and make original as it it
+        curr = head;
+        Node* dummy = new Node(0);
+        dummy->next = curr->next;
+        
+        while(curr->next->next){
+            Node* nxt = curr->next->next;
+            curr->next->next = nxt->next;
+            curr->next = nxt;
+            curr = nxt;
+        }
+        curr->next = NULL;  //last node->NULL
+        
+        return dummy->next;
     }
 };
