@@ -11,17 +11,12 @@ public:
             //apply 2 pointer to get target
             int j= i+1, k =n-1;
             while(j<k){
-                vector<int> temp;
                 while(j>i+1 && j<k && nums[j]==nums[j-1]) j++;    //avoid jth duplicate 
                 while(k<n-1 && j<k && nums[k]==nums[k+1]) k--;    //avoid kth duplicate
                 if(j>=k) break;
                 int sum = nums[i]+nums[j]+ nums[k];
                 if(sum==0){
-                    cout<<i<<" "<<j<<" "<<k<<endl;
-                    temp.push_back(nums[i]);
-                    temp.push_back(nums[j]);
-                    temp.push_back(nums[k]);
-                    ans.push_back(temp);
+                    ans.push_back({nums[i], nums[j], nums[k]});
                     j++; k--;
                 }
                 else if(sum< 0)
