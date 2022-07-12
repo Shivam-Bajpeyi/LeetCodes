@@ -1,33 +1,29 @@
-//Efficient: make prefix and suffix array to find leftmax and rightmax quickly
+//optimal: 2 pointer approach
 class Solution {
 public:
-    int trap(vector<int>& height) {
+     int trap(vector<int>& height) {
         int n= height.size(), waterStored = 0;
-        vector<int> leftmax(n), rightmax(n);
+        int l=0, r= n-1;
+        int leftmax = height[l], rightmax =height[r];
         
-        //leftmax
-        int maxi = 0;
-        for(int i=0; i<n; i++){
-            if(height[i]>maxi)
-                maxi = height[i];
-            leftmax[i] = maxi;
-        }
-           
-        //rightmax
-        maxi =0;
-        for(int i=n-1; i>=0; i--){
-            if(height[i]>maxi)
-                maxi = height[i];
-            rightmax[i] = maxi;
-        }
-            
-            
+        
         //find waterStored for every block
-        for(int i=0; i<n; i++){
-            int leftmaxi = leftmax[i];
-            int rightmaxi = rightmax[i];
+        while(l<=r){
+            if(height[l] <= height[r]){     //leftmax bar is smaller  
+                if(height[l] >= leftmax)    //update leftmax
+                    leftmax = height[l];
+                else
+                    waterStored += leftmax- height[l];
+                l++;
+            }
             
-            waterStored += min(leftmaxi, rightmaxi) - height[i];
+            else{   //when rightmax bar is smaller
+                if(height[r] >= rightmax)
+                    rightmax = height[r];
+                else
+                    waterStored += rightmax- height[r];
+                r--;
+            }   
         }
         
         return waterStored;
