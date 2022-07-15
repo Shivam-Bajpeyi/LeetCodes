@@ -28,30 +28,17 @@ class Solution{
             return;
         }
         
+        m[i][j] = 2;
         //up
-        int real = m[i][j];
-        m[i][j] = 2;
         f(i-1, j, temp+"U", ans, n, m);
-        m[i][j] = real;
-        
         //down
-        real = m[i][j];
-        m[i][j] = 2;
         f(i+1, j, temp+"D", ans, n, m);
-        m[i][j] = real;
-        
         //left
-        real = m[i][j];
-        m[i][j] = 2;
         f(i, j-1, temp+"L", ans, n, m);
-        m[i][j] = real;
-        
         //right
-        real = m[i][j];
-        m[i][j] = 2;
         f(i, j+1, temp+"R", ans, n, m);
-        m[i][j] = real;
         
+        m[i][j] = 1;
     }
 };
 
