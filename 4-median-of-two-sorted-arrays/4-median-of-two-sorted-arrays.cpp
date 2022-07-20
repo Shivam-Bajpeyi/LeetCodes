@@ -1,4 +1,4 @@
-//Brute: merge sort (tc: N(log MN), sc: O(M+N))
+//Brute: merge sort (tc: O(M+N), sc: O(M+N))
 class Solution {
 public:
     double findMedianSortedArrays(vector<int>& nums1, vector<int>& nums2) {
