@@ -1,21 +1,28 @@
 class Solution {
 public:
     vector<int> nextGreaterElements(vector<int>& nums) {
-        vector<int> ans;
-        
         int n = nums.size();
-        for(int i=0; i<n; i++){
-            int nxt = -1;
-            for(int j=i; j<i+n; j++){
-                if(nums[j%n]>nums[i]){
-                    nxt = nums[j%n];
-                    break;
-                }
-                    
-            }
-            ans.push_back(nxt);
-        }
+        vector<int> nge(n);
+        stack<int> st;      //monotinic stack
         
-        return ans;
+        //store nge 
+        for(int i=2*n-1; i>=0; i--){
+            int j = i%n;
+            
+            //get to the greater element by removing <= element
+            while(!st.empty() && st.top()<=nums[j]){
+                st.pop();   
+            }
+            
+            if(st.empty())
+                nge[j] = -1;
+            else
+                nge[j] = st.top();  //get the nge
+            
+            st.push(nums[j]);   //push current element
+                
+        }
+    
+        return nge;
     }
 };
