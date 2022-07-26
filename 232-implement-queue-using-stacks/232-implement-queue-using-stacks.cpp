@@ -1,54 +1,51 @@
 class MyQueue {
 public:
-    stack<int> input;
-    stack<int> output;
-    
+    stack<int> s1;
+    stack<int> s2;
     MyQueue() {
         
     }
     
     void push(int x) {
-        input.push(x);
+        s1.push(x);
     }
     
     int pop() {
-        int res = -1;   //when nothing left to return
-        if(!output.empty()){    //if output is has elements pop from there.
-            res = output.top();
-            output.pop();
-            return res;
+        int ans = -1;
+        
+        //if s2 is empty fill from s1 to it
+        if(s2.empty()){
+            while(!s1.empty()){
+                s2.push(s1.top());
+                s1.pop();
+            }
         }
         
-        //when output got empty, move all elements of input to output (st1->st2)
-        while(!input.empty()){
-            output.push(input.top());
-            input.pop();
-        }
+        ans = s2.top();
+        s2.pop();
         
-        res= output.top();
-        output.pop();
-        return res;
+        return ans;
+        
     }
     
     int peek() {
-        int res = -1;   //when nothing left to return
-        if(!output.empty()){    //if output is has elements pop from there.
-            res = output.top();
-            return res;
+        int ans = -1;
+        
+        //if s2 is empty fill from s1 to it
+        if(s2.empty()){
+            while(!s1.empty()){
+                s2.push(s1.top());
+                s1.pop();
+            }
         }
         
-        //when output got empty, move all elements of input to output (st1->st2)
-        while(!input.empty()){
-            output.push(input.top());
-            input.pop();
-        }
+        ans = s2.top();
+        return ans;
         
-        res= output.top();
-        return res;
     }
     
     bool empty() {
-        return (input.empty() && output.empty());
+        return (s1.size()+s2.size())==0;
     }
 };
 
