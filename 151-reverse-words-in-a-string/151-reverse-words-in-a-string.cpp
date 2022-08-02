@@ -1,33 +1,33 @@
+//optimal: In-place
 class Solution {
 public:
     string reverseWords(string s) {
-        int n = s.size();
-        stack<string> st;  //to store words
-        string str = "";
+        string ans = "";
+        string temp = "";
         
-        //step-1: store words in stack
-        for(int i=0; i<n; i++){
-            if(s[i]== ' ' && !str.empty()){
-                st.push(str);
-                str = "";
-            } 
-            
+        for(int i=0; i<s.size(); i++){
             if(s[i] != ' ')
-                str += s[i];
+                temp += s[i];
+            
+            if(s[i]== ' ' && temp != ""){   //add word to the string
+                if(ans == "")
+                    ans = temp;
+                else
+                    ans = temp + " " + ans;
+                
+                temp = "";
+            }
         }
         
-        if(!str.empty())
-            st.push(str);   //last word
-        
-        //step-2: pop words from stack and store them to reverse the order
-        str = "";
-        while(!st.empty()){
-            str += st.top(); st.pop();
-            if(!st.empty())
-                str += " ";
+        //if last word is left to be add
+        if(temp != ""){
+            if(ans != "")
+                ans = temp + " "+ ans;
+            else
+                ans = temp;
         }
+            
         
-        return str;
-        
+        return ans;
     }
 };
