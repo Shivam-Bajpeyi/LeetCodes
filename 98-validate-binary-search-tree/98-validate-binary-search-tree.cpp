@@ -11,18 +11,17 @@
  */
 class Solution {
 public:
-    bool isValidBST(TreeNode* root) {
-        return check(root, LONG_MIN, LONG_MAX);   //root can be any value(INT_MIN, INT_MAX)
-    }
-    
-    bool check(TreeNode* root, long mn, long mx){
-        if(root== NULL) //if reached to the leaf node, that means this path is following property of BSt
+    bool validate(TreeNode* root, long mn, long mx){
+        if(root==NULL)
             return true;
         
-        if(root->val <= mn || root->val >=mx) //if root is not following condition, return false
-            return false;
+        //false condition
+        if(root->val <=mn || root->val >=mx) return false;
         
-        //check left and right child of the node with updated limits.(min limit, max limit)
-        return (check(root->left, mn, root->val) && check(root->right, root->val, mx));
+        return (validate(root->left, mn, root->val) && validate(root->right, root->val, mx));
+    }
+    
+    bool isValidBST(TreeNode* root) {
+        return validate(root, LONG_MIN, LONG_MAX);
     }
 };
