@@ -1,19 +1,18 @@
 class Solution {
 public:
     int firstUniqChar(string s) {
-        int idx = -1;
+        unordered_map<char, int> mpp;
         
-        //store frequency of each element
-        unordered_map<int, int> freq;
-        for(int i=0; i<s.size(); i++){
-            freq[s[i]]++;
-        }
+        //store frequency
+        for(auto &it: s)
+            mpp[it]++;
         
+        //check first char with freq = 1;
         for(int i=0; i<s.size(); i++){
-            if(freq[s[i]] == 1) //non-repeating element will have frequency 1
+            if(mpp[s[i]]==1)
                 return i;
         }
         
-        return idx;
+        return -1;
     }
 };
