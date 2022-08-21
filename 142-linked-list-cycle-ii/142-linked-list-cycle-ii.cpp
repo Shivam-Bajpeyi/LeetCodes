@@ -9,23 +9,25 @@
 class Solution {
 public:
     ListNode *detectCycle(ListNode *head) {
+        //slow-fast pointer approach
         ListNode* slow = head;
         ListNode* fast = head;
         
-        //if they meet at some point there is cycle
+        //move them to see if they matches
         while(fast && fast->next){
-            fast = fast->next->next;
             slow = slow->next;
+            fast = fast->next->next;
             
-            if(slow == fast)
-                break;
+            if(slow==fast) break;
         }
         
-        if(fast==NULL || fast->next==NULL)
+        if(fast==NULL || fast->next==NULL)  //no cycle, pointer will reach to end
             return NULL;
         
-        //point fast at head and move both by 1 step
-        fast = head;
+        //if there is cycle, detect where is it
+        fast = head;    //place head at head
+        
+        //move 1 step untill they match
         while(slow!=fast){
             slow = slow->next;
             fast = fast->next;
