@@ -11,24 +11,19 @@
 class Solution {
 public:
     ListNode* reverseList(ListNode* head) {
-        if(head==NULL || head->next==NULL)
-            return head;
+        if(head==NULL || head->next==NULL) return head;
         
-        //change link 1->2 to 1<-2
         ListNode* prev = NULL;
         ListNode* curr = head;
-        ListNode* nxt = head->next;
         
+        //reverse links between nodes: prev->curr => prev<-curr
         while(curr){
-            curr->next = prev;  //1<-2
-            
-            //update pointers
+            ListNode* nxt = curr->next;
+            curr->next = prev;
             prev = curr;
             curr = nxt;
-            if(nxt) nxt = nxt->next;
         }
         
-        //curr is at NULL, prev at last node
         return prev;
     }
 };
