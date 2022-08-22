@@ -1,3 +1,5 @@
+//same as DP26: Longest Common SubString
+
 class Solution {
 public:
     int findLength(vector<int>& text1, vector<int>& text2) {
