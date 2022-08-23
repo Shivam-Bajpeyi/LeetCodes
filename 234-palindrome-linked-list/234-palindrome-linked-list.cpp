@@ -15,7 +15,7 @@ public:
         if(head->next ==NULL)
             return head;
         
-        //step-1: reach tp the middle node
+        //step-1: reach to the middle node
         ListNode* slow = head;
         ListNode* fast = head;
         
