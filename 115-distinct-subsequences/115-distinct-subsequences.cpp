@@ -89,6 +89,38 @@
 // };
 
 //DP tabulation: space optimization with 1d array (to store previous row i-1 things)
+// class Solution {
+// public:
+//     int numDistinct(string s, string t) {
+//         int n = s.size();
+//         int m = t.size();
+        
+//         //shifting of index to right to utilize the base case to make the table
+//         vector<double> prev(m+1, 0), curr(m+1, 0);
+        
+//         //put 1 for the j=0 because t is exhausted here
+//         prev[0] = curr[0] = 1;
+
+//         //form table i= 1 to n & j= 1 to m
+//         for(int i=1; i<=n; i++){
+//             for(int j=1; j<=m; j++){
+//                 //i matches with j: 2 possibilities whether to take i or not
+//                 if(s[i-1]==t[j-1])
+//                     curr[j] = prev[j-1] + prev[j];
+        
+//                 //if its not matching, you definitely have to search inside in s1 for jth char      
+//                 else
+//                     curr[j] = prev[j];
+//             }
+//             prev = curr;
+//         }
+        
+//         return (int)curr[m];
+//     }
+// };
+
+
+//DP tabulation: space optimization with only one 1d array; only prev is used
 class Solution {
 public:
     int numDistinct(string s, string t) {
@@ -96,25 +128,24 @@ public:
         int m = t.size();
         
         //shifting of index to right to utilize the base case to make the table
-        vector<double> prev(m+1, 0), curr(m+1, 0);
+        vector<double> prev(m+1, 0);
         
         //put 1 for the j=0 because t is exhausted here
-        prev[0] = curr[0] = 1;
+        prev[0]  = 1;
 
         //form table i= 1 to n & j= 1 to m
         for(int i=1; i<=n; i++){
-            for(int j=1; j<=m; j++){
+            for(int j=m; j>=1; j--){
                 //i matches with j: 2 possibilities whether to take i or not
                 if(s[i-1]==t[j-1])
-                    curr[j] = prev[j-1] + prev[j];
+                    prev[j] = prev[j-1] + prev[j];
         
                 //if its not matching, you definitely have to search inside in s1 for jth char      
                 else
-                    curr[j] = prev[j];
+                    prev[j] = prev[j];
             }
-            prev = curr;
         }
         
-        return (int)curr[m];
+        return (int)prev[m];
     }
 };
