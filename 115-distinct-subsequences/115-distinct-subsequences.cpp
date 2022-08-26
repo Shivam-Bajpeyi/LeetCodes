@@ -56,6 +56,39 @@
 
 
 //DP tabulation: make the dp table from bottom to up
+// class Solution {
+// public:
+//     int numDistinct(string s, string t) {
+//         int n = s.size();
+//         int m = t.size();
+        
+//         //shifting of index to right to utilize the base case to make the table
+//         vector<vector<double>> dp(n+1, vector<double> (m+1, 0));
+        
+//         //use base cases to build the base of the table: -1 -> 0
+//         for(int j=0; j<=m; j++) //when s exhauseted; nothing to match with t str
+//             dp[0][j] = 0;
+//         for(int i=0; i<=n; i++)  //when t exhausted; everyything matched
+//             dp[i][0] = 1;
+
+//         //form table i= 1 to n & j= 1 to m
+//         for(int i=1; i<=n; i++){
+//             for(int j=1; j<=m; j++){
+//                 //i matches with j: 2 possibilities whether to take i or not
+//                 if(s[i-1]==t[j-1])
+//                     dp[i][j] = dp[i-1][j-1] + dp[i-1][j];
+        
+//                 //if its not matching, you definitely have to search inside in s1 for jth char      
+//                 else
+//                     dp[i][j] = dp[i-1][j];
+//             }
+//         }
+        
+//         return (int)dp[n][m];
+//     }
+// };
+
+//DP tabulation: space optimization with 1d array (to store previous row i-1 things)
 class Solution {
 public:
     int numDistinct(string s, string t) {
@@ -63,27 +96,25 @@ public:
         int m = t.size();
         
         //shifting of index to right to utilize the base case to make the table
-        vector<vector<double>> dp(n+1, vector<double> (m+1, 0));
+        vector<double> prev(m+1, 0), curr(m+1, 0);
         
-        //use base cases to build the base of the table: -1 -> 0
-        for(int j=0; j<=m; j++) //when s exhauseted; nothing to match with t str
-            dp[0][j] = 0;
-        for(int i=0; i<=n; i++)  //when t exhausted; everyything matched
-            dp[i][0] = 1;
+        //put 1 for the j=0 because t is exhausted here
+        prev[0] = curr[0] = 1;
 
         //form table i= 1 to n & j= 1 to m
         for(int i=1; i<=n; i++){
             for(int j=1; j<=m; j++){
                 //i matches with j: 2 possibilities whether to take i or not
                 if(s[i-1]==t[j-1])
-                    dp[i][j] = dp[i-1][j-1] + dp[i-1][j];
+                    curr[j] = prev[j-1] + prev[j];
         
                 //if its not matching, you definitely have to search inside in s1 for jth char      
                 else
-                    dp[i][j] = dp[i-1][j];
+                    curr[j] = prev[j];
             }
+            prev = curr;
         }
         
-        return (int)dp[n][m];
+        return (int)curr[m];
     }
 };
