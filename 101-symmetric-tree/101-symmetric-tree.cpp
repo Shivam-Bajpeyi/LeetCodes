@@ -11,21 +11,17 @@
  */
 class Solution {
 public:
-    
-    bool check(TreeNode* node1, TreeNode* node2){
-        if(node1==NULL || node2==NULL) return (node1==node2);
-        if((node1->val == node2->val) && check(node1->left, node2->right) && check(node1->right, node2->left))
-            return true;
-        return false;
+    bool match(TreeNode* p, TreeNode* q){
+        if(!p && !q) return 1;
+        if(!p || !q) return 0;
+        
+        if(p->val != q->val) return 0;
+        
+        //return true if both sides matches
+        return (match(p->left, q->right) && match(p->right, q->left));  //left n right
     }
     
-    bool isSymmetric(TreeNode* root) {
-        if(!root->left && !root->right)
-            return true;
-        
-        TreeNode* node1 = root->left;
-        TreeNode* node2 = root->right;
-        
-        return check(node1, node2)!=false;
+    bool isSymmetric(TreeNode* root){
+        return match(root->left, root->right);
     }
 };
