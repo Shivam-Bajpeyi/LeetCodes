@@ -74,42 +74,89 @@
 
 
 //3. Tabulation: build dp table(bottom->up) using base case(right shift of index) & recurrence relation
+// class Solution {
+// public:
+//     bool isMatch(string p, string s) {
+//         int n = s.size();
+//         int m = p.size();   //contains lowercase + '?' + '*'
+        
+//         //right shift of index: -1 ->0 
+//         vector<vector<bool>> dp(n+1, vector<bool>(m+1, 0));
+        
+//         //build base using base
+//         dp[0][0] = 1;   //i<0 && j<0
+//         for(int j=1; j<=m; j++) //i<0 && j>=0 
+//             dp[0][j] = 0;
+//         for(int i=1; i<=n; i++){    //if i>=0 && j<0
+//             if(s[i-1] == '*')
+//                 dp[i][0] = 1;
+//             else
+//                 break;
+//         }
+            
+//         //build complete table using recurrence relation
+//         for(int i=1; i<=n; i++){
+//             for(int j=1; j<=m; j++){
+//             //match + '?' will match to the jth char
+//             if(s[i-1] == p[j-1] || s[i-1]=='?') 
+//                 dp[i][j] = dp[i-1][j-1];
+
+//             //if s[i] is astric, try matching by assuming '*' can match with any sequemce in str2 0 to remaining part: assign * nothing || assume it will match with j-1 
+//             else if(s[i-1]== '*')
+//                 dp[i][j] = dp[i-1][j] || dp[i][j-1];
+                
+//             else
+//                 dp[i][j] = 0;
+//             }
+//         }
+        
+//         return dp[n][m];
+//     }
+// };
+
+
+//4. Tabulation(space-optimized): using 1d prev array (stores i-1 states)
 class Solution {
 public:
     bool isMatch(string p, string s) {
         int n = s.size();
         int m = p.size();   //contains lowercase + '?' + '*'
         
-        //right shift of index: -1 ->0 
-        vector<vector<bool>> dp(n+1, vector<bool>(m+1, 0));
+        //right shift of index(1-based indexing): -1 ->0 
+        vector<bool> prev(m+1, 0), curr(m+1, 0);
         
         //build base using base
-        dp[0][0] = 1;   //i<0 && j<0
-        for(int j=1; j<=m; j++) //i<0 && j>=0 
-            dp[0][j] = 0;
-        for(int i=1; i<=n; i++){    //if i>=0 && j<0
-            if(s[i-1] == '*')
-                dp[i][0] = 1;
-            else
-                break;
-        }
+        prev[0] = 1;   //i==0 && j==0
+        for(int j=1; j<=m; j++) //i==0 && j>0 
+            prev[j] = 0;
+        
             
         //build complete table using recurrence relation
         for(int i=1; i<=n; i++){
-            for(int j=1; j<=m; j++){
-            //match + '?' will match to the jth char
-            if(s[i-1] == p[j-1] || s[i-1]=='?') 
-                dp[i][j] = dp[i-1][j-1];
-
-            //if s[i] is astric, try matching by assuming '*' can match with any sequemce in str2 0 to remaining part: assign * nothing || assume it will match with j-1 
-            else if(s[i-1]== '*')
-                dp[i][j] = dp[i-1][j] || dp[i][j-1];
-                
-            else
-                dp[i][j] = 0;
+            curr[0] = 1;
+            
+            for(int ii=1; ii<=i; ii++){    //if i>0 && j==0
+                if(s[ii-1] != '*'){
+                    curr[0] = 0;
+                    break;
+                }
             }
+
+                for(int j=1; j<=m; j++){
+                //match + '?' will match to the jth char
+                if(s[i-1] == p[j-1] || s[i-1]=='?') 
+                    curr[j] = prev[j-1];
+
+                //if s[i] is astric, try matching by assuming '*' can match with any sequemce in str2 0 to remaining part: assign * nothing || assume it will match with j-1 
+                else if(s[i-1]== '*')
+                    curr[j] = prev[j] || curr[j-1];
+
+                else
+                    curr[j] = 0;
+            }
+            prev = curr;
         }
         
-        return dp[n][m];
+        return prev[m];
     }
 };
