@@ -61,33 +61,62 @@
 
 
 //3. Tabulation: make dp table in reverse from ind-> n-1 to 0 & buy -> 0 to 1 using base case & recurrence relation
+// class Solution {
+// public:
+//     int maxProfit(vector<int>& prices) {
+//         int n = prices.size();
+        
+//         //dp[n+1][buy]: to manage the base case n==0
+//         vector<vector<int>> dp(n+1, vector<int> (2, INT_MIN));
+            
+//         //base case
+//         dp[n][0] = dp[n][1] = 0;
+        
+//         for(int ind= n-1; ind>=0; ind--){
+//             for(int buy=0; buy<=1; buy++){
+//                 //if its turn to buy: buy and not-buy (whichever is more profitable)
+//                 if(buy==1)
+//                     dp[ind][buy] = max(-prices[ind]+ dp[ind+1][0] , 0+ dp[ind+1][1]);
+
+//                 //its turn to sell: selling and not-selling (whichever is more profitable)
+//                 else
+//                     dp[ind][buy] = max(prices[ind]+ dp[ind+1][1], 0+ dp[ind+1][0]);
+//                }
+//         }
+        
+//         return dp[0][1];
+//     }
+// };
+
+
+//4. Tabulation- space optimized using prev (store i+1 states)
 class Solution {
 public:
     int maxProfit(vector<int>& prices) {
         int n = prices.size();
         
         //dp[n+1][buy]: to manage the base case n==0
-        vector<vector<int>> dp(n+1, vector<int> (2, INT_MIN));
+        vector<int> prev(2, 0), curr(2, 0);
             
         //base case
-        dp[n][0] = dp[n][1] = 0;
+        prev[0] = prev[1] = 0;
         
         for(int ind= n-1; ind>=0; ind--){
             for(int buy=0; buy<=1; buy++){
                 //if its turn to buy: buy and not-buy (whichever is more profitable)
                 if(buy==1)
-                    dp[ind][buy] = max(-prices[ind]+ dp[ind+1][0] , 0+ dp[ind+1][1]);
+                    curr[buy] = max(-prices[ind]+ prev[0] , 0+ prev[1]);
 
                 //its turn to sell: selling and not-selling (whichever is more profitable)
                 else
-                    dp[ind][buy] = max(prices[ind]+ dp[ind+1][1], 0+ dp[ind+1][0]);
+                    curr[buy] = max(prices[ind]+ prev[1], 0+ prev[0]);
                }
+            
+            prev = curr;
         }
         
-        return dp[0][1];
+        return curr[1];
     }
 };
-
-
 
         
