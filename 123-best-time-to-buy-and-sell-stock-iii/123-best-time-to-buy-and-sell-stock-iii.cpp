@@ -44,29 +44,61 @@
 // };
 
 
-//3. Tabulation: make dp[n][buy][cap] in reverse way 
-// ind = n-1 to 0, buy = 1 to 0, cap= 2 to 0
+//3. Tabulation: make dp[n+1][buy][cap] in reverse way 
+// ind = n-1 to 0, buy = 0 to 1, cap= 1 to 2
+// class Solution {
+// public:
+//     int maxProfit(vector<int>& prices) {
+//         int n = prices.size();
+        
+//         //ind==0 || cap==0 => dp[ind][buy][cap]= 0;    
+//         vector<vector<vector<int>>> dp(n+1, vector<vector<int>>(2, vector<int>(3, 0)));
+    
+//         //use recurrence relation to make table
+//         for(int ind= n-1; ind>=0; ind--){
+//             for(int buy=0; buy<=1; buy++){
+//                 for(int cap=1; cap<=2; cap++){
+//                     if(buy==1)
+//                         dp[ind][buy][cap] = max(-prices[ind]+ dp[ind+1][0][cap], 0+ dp[ind+1][1][cap]);
+//                     else
+//                         dp[ind][buy][cap] = max(prices[ind]+ dp[ind+1][1][cap-1], 0+ dp[ind+1][0][cap]); 
+//                 }
+//             }
+//         }
+        
+//         //ind==0, buy= 0, cap= 0
+//         return dp[0][1][2];
+//     }
+// };
+
+
+
+//4. Tabulation(space-optimized): make dp[n+1][buy][cap] in reverse way 
+// ind = n-1 to 0, buy = 0 to 1, cap= 1 to 2
+//replace [ind+1] with ahead
 class Solution {
 public:
     int maxProfit(vector<int>& prices) {
         int n = prices.size();
         
         //ind==0 || cap==0 => dp[ind][buy][cap]= 0;    
-        vector<vector<vector<int>>> dp(n+1, vector<vector<int>>(2, vector<int>(3, 0)));
+        vector<vector<int>> ahead(2, vector<int>(3, 0)), curr(2, vector<int>(3, 0));
     
         //use recurrence relation to make table
         for(int ind= n-1; ind>=0; ind--){
             for(int buy=0; buy<=1; buy++){
                 for(int cap=1; cap<=2; cap++){
                     if(buy==1)
-                        dp[ind][buy][cap] = max(-prices[ind]+ dp[ind+1][0][cap], 0+ dp[ind+1][1][cap]);
+                        curr[buy][cap] = max(-prices[ind]+ ahead[0][cap], 0+ ahead[1][cap]);
                     else
-                        dp[ind][buy][cap] = max(prices[ind]+ dp[ind+1][1][cap-1], 0+ dp[ind+1][0][cap]); 
+                        curr[buy][cap] = max(prices[ind]+ ahead[1][cap-1], 0+ ahead[0][cap]); 
                 }
             }
+            
+            ahead = curr;
         }
         
         //ind==0, buy= 0, cap= 0
-        return dp[0][1][2];
+        return curr[1][2];
     }
 };
