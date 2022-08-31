@@ -76,29 +76,59 @@
 //4. Tabulation(space-optimized): make dp[n+1][buy][cap] in reverse way 
 // ind = n-1 to 0, buy = 0 to 1, cap= 1 to 2
 //replace [ind+1] with ahead
+// class Solution {
+// public:
+//     int maxProfit(vector<int>& prices) {
+//         int n = prices.size();
+        
+//         //ind==0 || cap==0 => dp[ind][buy][cap]= 0;    
+//         vector<vector<int>> ahead(2, vector<int>(3, 0)), curr(2, vector<int>(3, 0));
+    
+//         //use recurrence relation to make table
+//         for(int ind= n-1; ind>=0; ind--){
+//             for(int buy=0; buy<=1; buy++){
+//                 for(int cap=1; cap<=2; cap++){
+//                     if(buy==1)
+//                         curr[buy][cap] = max(-prices[ind]+ ahead[0][cap], 0+ ahead[1][cap]);
+//                     else
+//                         curr[buy][cap] = max(prices[ind]+ ahead[1][cap-1], 0+ ahead[0][cap]); 
+//                 }
+//             }
+            
+//             ahead = curr;
+//         }
+        
+//         //ind==0, buy= 0, cap= 0
+//         return curr[1][2];
+//     }
+// };
+
+
+//4. Tabulation(space-optimized): 1-d arrays using ahead and curr;
+// transaction = 0 1 2 3; even = buy, odd= sell
+//ahead[4] = 0  //cap==0 -> return 0;
 class Solution {
 public:
     int maxProfit(vector<int>& prices) {
         int n = prices.size();
         
-        //ind==0 || cap==0 => dp[ind][buy][cap]= 0;    
-        vector<vector<int>> ahead(2, vector<int>(3, 0)), curr(2, vector<int>(3, 0));
+        //ahead[4] = 0  
+        vector<int> ahead(5, 0), curr(5, 0);
     
         //use recurrence relation to make table
         for(int ind= n-1; ind>=0; ind--){
-            for(int buy=0; buy<=1; buy++){
-                for(int cap=1; cap<=2; cap++){
-                    if(buy==1)
-                        curr[buy][cap] = max(-prices[ind]+ ahead[0][cap], 0+ ahead[1][cap]);
-                    else
-                        curr[buy][cap] = max(prices[ind]+ ahead[1][cap-1], 0+ ahead[0][cap]); 
-                }
+            for(int trans=0; trans<=3; trans++){
+                if(trans%2==0)  //buy
+                    curr[trans] = max(-prices[ind]+ ahead[trans+1], 0+ ahead[trans]);
+                
+                else    //sell
+                    curr[trans] = max(prices[ind]+ ahead[trans+1], 0+ ahead[trans]); 
             }
             
             ahead = curr;
         }
         
         //ind==0, buy= 0, cap= 0
-        return curr[1][2];
+        return curr[0];
     }
 };
