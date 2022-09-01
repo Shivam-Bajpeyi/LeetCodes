@@ -70,29 +70,56 @@
 
 
 //4. tabulation(space- optimized): using ahead[2][k+1] and curr[2][k+1]
+// class Solution {
+// public: 
+//     int maxProfit(int k, vector<int>& prices) {
+//         int n = prices.size();
+        
+//         //ahead will store ind+1 states
+//         vector<vector<int>> ahead(2, vector<int>(k+1, 0)), curr(2, vector<int>(k+1, 0));
+        
+//         //put curr as dp[ind] and ahead as dp[ind+1]
+//         for(int ind= n-1; ind>=0; ind--){
+//             for(int buy=0; buy<=1; buy++){
+//                 for(int cap=1; cap<=k; cap++){
+//                     if(buy==1)
+//                         curr[buy][cap] = max(-prices[ind]+ahead[0][cap], 0+ahead[1][cap]);
+                    
+//                     else
+//                         curr[buy][cap] = max(prices[ind]+ahead[1][cap-1], 0+ahead[0][cap]);
+//                 }
+//             }
+            
+//             ahead = curr;
+//         }
+        
+//         return curr[1][k];
+//     }
+// };
+
+
+//5. tabulation(space- optimized): using tn(transaction number) ahead[2*k+1] and curr[2*k+1]
 class Solution {
 public: 
     int maxProfit(int k, vector<int>& prices) {
         int n = prices.size();
         
         //ahead will store ind+1 states
-        vector<vector<int>> ahead(2, vector<int>(k+1, 0)), curr(2, vector<int>(k+1, 0));
+        vector<int> ahead(2*k+1, 0), curr(2*k+1, 0);
         
         //put curr as dp[ind] and ahead as dp[ind+1]
         for(int ind= n-1; ind>=0; ind--){
-            for(int buy=0; buy<=1; buy++){
-                for(int cap=1; cap<=k; cap++){
-                    if(buy==1)
-                        curr[buy][cap] = max(-prices[ind]+ahead[0][cap], 0+ahead[1][cap]);
+            for(int tn=0; tn<2*k; tn++){
+                if(tn%2==0)
+                    curr[tn] = max(-prices[ind]+ahead[tn+1], 0+ahead[tn]);
                     
-                    else
-                        curr[buy][cap] = max(prices[ind]+ahead[1][cap-1], 0+ahead[0][cap]);
-                }
+                else
+                    curr[tn] = max(prices[ind]+ahead[tn+1], 0+ahead[tn]);
             }
             
             ahead = curr;
         }
         
-        return curr[1][k];
+        return curr[0];
     }
 };
