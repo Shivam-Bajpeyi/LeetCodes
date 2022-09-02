@@ -96,16 +96,11 @@ public:
         vector<int> ahead(2, 0), aheadNext(2, 0), curr(2, 0);
             
         for(int ind= n-1; ind>=0; ind--){
-            for(int buy=0; buy<=1; buy++){
-                //if its turn to buy: buy and not-buy (whichever is more profitable)
-                if(buy==1)
-                    curr[buy] = max(-prices[ind]+ ahead[0] , 0+ ahead[1]);
-
-                //its turn to sell: selling and not-selling (whichever is more profitable)
-                else
-                    curr[buy] = max(prices[ind]+ aheadNext[1], 0+ ahead[0]);
-               }
-            
+            //time to buy
+            curr[1] = max(-prices[ind]+ ahead[0] , 0+ ahead[1]);
+            //its turn to sell: selling and not-selling (whichever is more profitable)
+            curr[0] = max(prices[ind]+ aheadNext[1], 0+ ahead[0]);
+        
             aheadNext = ahead;
             ahead = curr;
         }
