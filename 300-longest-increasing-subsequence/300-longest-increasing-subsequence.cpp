@@ -80,30 +80,90 @@
 //     }
 // };
 
-
 //4. Tabulation(space- optimized): using next(n+1, 0) and curr(n+1, 0)
+// class Solution {
+// public:
+//     int lengthOfLIS(vector<int>& nums) {
+//         int n = nums.size();
+//         //dp[n+1][n+1]: 1- based index to deal with prev = -1;
+//         vector<int> next(n+1, 0), curr(n+1, 0);
+        
+//         //put next as dp[ind+1]
+//         for(int ind=n-1; ind>=0; ind--){
+//             for(int prev=ind-1; prev>=-1; prev--){
+//                 //notPick- pick
+//                 int notPick = 0+ next[prev+1];
+//                 int pick = 0;
+//                 if(prev==-1 || nums[ind]> nums[prev])
+//                     pick = 1+next[ind+1];
+
+//                 //max out of it 
+//                 curr[prev+1] = max(notPick, pick); 
+//             }
+//             next = curr;
+//         }
+        
+//         return curr[0];
+//     }
+// };
+
+
+//5. O(N^2) algorithm to find LIS: check previous element of i to find the LIS[i]
 class Solution {
 public:
     int lengthOfLIS(vector<int>& nums) {
         int n = nums.size();
-        //dp[n+1][n+1]: 1- based index to deal with prev = -1;
-        vector<int> next(n+1, 0), curr(n+1, 0);
         
-        //put next as dp[ind+1]
-        for(int ind=n-1; ind>=0; ind--){
-            for(int prev=ind-1; prev>=-1; prev--){
-                //notPick- pick
-                int notPick = 0+ next[prev+1];
-                int pick = 0;
-                if(prev==-1 || nums[ind]> nums[prev])
-                    pick = 1+next[ind+1];
-
-                //max out of it 
-                curr[prev+1] = max(notPick, pick); 
+        vector<int> LIS(n, 1);  //LIS of len= 1, single element itself
+        int mx = 1;
+        //find if any of the previous element can be part of increasing sequence for the current element
+        for(int i=0; i<n; i++){
+            for(int j=0; j<i; j++){
+                if(nums[j]< nums[i]){
+                    LIS[i] = max(LIS[i], 1+LIS[j]);
+                    mx = max(mx, LIS[i]);
+                }
+                    
             }
-            next = curr;
         }
         
-        return curr[0];
+        return mx;
     }
 };
+
+
+// class Solution {
+// public:
+//     int lengthOfLIS(vector<int>& nums) {
+//         int n = nums.size();
+        
+//         vector<int> LIS(n, 1);  //LIS of len= 1, single element itself
+//         int mx = 1;
+//         //find if any of the previous element can be part of increasing sequence for the current element
+//         for(int i=0; i<n; i++){
+//             for(int j=0; j<i; j++){
+//                 if(nums[j]< nums[i]){
+//                     LIS[i] = max(LIS[i], 1+LIS[j]);
+//                     mx = max(mx, LIS[i]);
+//                 }
+                    
+//             }
+//         }
+        
+//         //printing LIS: backtrack from the highest value of LIS
+//         vector<int> hash(n);        //take care of prev index of LIS[i]
+//         int ind;
+        
+//         //get index for LIS value
+//         for(int i=0; i<n; i++){
+//             if(LIS[i]==mx){
+//                 ind = i;
+//                 break;
+//             }
+//         }
+      
+        
+        
+//         return mx;
+//     }
+// };
