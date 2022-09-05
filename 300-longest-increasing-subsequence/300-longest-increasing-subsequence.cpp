@@ -56,26 +56,54 @@
 
 //3. Tabulation: using dp[n][n+1]
 //ind = n-1 to 0 and prev = ind-1 to -1 (1-based: -1->0)
+// class Solution {
+// public:
+//     int lengthOfLIS(vector<int>& nums) {
+//         int n = nums.size();
+//         //dp[n+1][n+1]: 1- based index to deal with prev = -1;
+//         vector<vector<int>> dp(n+1, vector<int>(n+1, 0));
+        
+//         for(int ind=n-1; ind>=0; ind--){
+//             for(int prev=ind-1; prev>=-1; prev--){
+//                 //notPick- pick
+//                 int notPick = 0+ dp[ind+1][prev+1];
+//                 int pick = 0;
+//                 if(prev==-1 || nums[ind]> nums[prev])
+//                     pick = 1+dp[ind+1][ind+1];
+
+//                 //max out of it 
+//                 dp[ind][prev+1] = max(notPick, pick); 
+//             }
+//         }
+        
+//         return dp[0][0];
+//     }
+// };
+
+
+//4. Tabulation(space- optimized): using next(n+1, 0) and curr(n+1, 0)
 class Solution {
 public:
     int lengthOfLIS(vector<int>& nums) {
         int n = nums.size();
         //dp[n+1][n+1]: 1- based index to deal with prev = -1;
-        vector<vector<int>> dp(n+1, vector<int>(n+1, 0));
+        vector<int> next(n+1, 0), curr(n+1, 0);
         
+        //put next as dp[ind+1]
         for(int ind=n-1; ind>=0; ind--){
             for(int prev=ind-1; prev>=-1; prev--){
                 //notPick- pick
-                int notPick = 0+ dp[ind+1][prev+1];
+                int notPick = 0+ next[prev+1];
                 int pick = 0;
                 if(prev==-1 || nums[ind]> nums[prev])
-                    pick = 1+dp[ind+1][ind+1];
+                    pick = 1+next[ind+1];
 
                 //max out of it 
-                dp[ind][prev+1] = max(notPick, pick); 
+                curr[prev+1] = max(notPick, pick); 
             }
+            next = curr;
         }
         
-        return dp[0][0];
+        return curr[0];
     }
 };
