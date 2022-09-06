@@ -109,29 +109,6 @@
 
 
 //5. O(N^2) algorithm to find LIS: check previous element of i to find the LIS[i]
-class Solution {
-public:
-    int lengthOfLIS(vector<int>& nums) {
-        int n = nums.size();
-        
-        vector<int> LIS(n, 1);  //LIS of len= 1, single element itself
-        int mx = 1;
-        //find if any of the previous element can be part of increasing sequence for the current element
-        for(int i=0; i<n; i++){
-            for(int j=0; j<i; j++){
-                if(nums[j]< nums[i]){
-                    LIS[i] = max(LIS[i], 1+LIS[j]);
-                    mx = max(mx, LIS[i]);
-                }
-                    
-            }
-        }
-        
-        return mx;
-    }
-};
-
-
 // class Solution {
 // public:
 //     int lengthOfLIS(vector<int>& nums) {
@@ -150,20 +127,78 @@ public:
 //             }
 //         }
         
-//         //printing LIS: backtrack from the highest value of LIS
+//         return mx;
+//     }
+// };
+
+
+//DP42: 6. printing LIS using the same algo
+// class Solution {
+// public:
+//     int lengthOfLIS(vector<int>& nums) {
+//         int n = nums.size();
+//         vector<int> LIS(n, 1);  //LIS of len= 1, single element itself
 //         vector<int> hash(n);        //take care of prev index of LIS[i]
+        
+//         int mx = 1;
+//         //find if any of the previous element can be part of increasing sequence for the current element
+//         for(int i=0; i<n; i++){
+//             hash[i] = i;
+//             for(int j=0; j<i; j++){
+//                 if(nums[j]< nums[i] && 1+LIS[j]> LIS[i]){
+//                     LIS[i] = 1+LIS[j];
+//                     hash[i] = j; //store the prev indexes
+//                     mx = max(mx, LIS[i]);
+//                 }     
+//             }
+//         }
+        
+//         //printing LIS: backtrack in the hash from the index of LIS
 //         int ind;
         
-//         //get index for LIS value
+//         //get that index
 //         for(int i=0; i<n; i++){
 //             if(LIS[i]==mx){
-//                 ind = i;
+//                 ind = i;       //LIS index
 //                 break;
 //             }
 //         }
       
+//         //backtrack from this index
+//         string str = "";
+//         while(ind != hash[ind]){
+//             str += to_string(nums[ind]);
+//             // cout<<ind<<" "<<hash[ind]<<endl;
+//             ind = hash[ind];
+//         }
+        
+//         str+= to_string(nums[ind]);
+//         reverse(str.begin(), str.end());
+//         cout<<str;
         
         
 //         return mx;
 //     }
 // };
+
+
+//DP43: using binary search(lower-bound: return index of that element and if that element is not there in ds then return index of element that is greater to it) 
+class Solution {
+public:
+    int lengthOfLIS(vector<int>& nums) {
+        vector<int> LB;
+        LB.push_back(nums[0]);
+        
+        //get lower_bound for every element and put element over there
+        for(int i=1; i<nums.size(); i++){
+            if(nums[i]> LB.back())
+                LB.push_back(nums[i]);
+            else{
+                int ind = lower_bound(LB.begin(), LB.end(), nums[i])- LB.begin();
+                LB[ind] = nums[i];
+            }
+        }
+        
+        return LB.size();
+    }
+};
