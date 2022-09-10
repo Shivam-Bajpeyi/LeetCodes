@@ -11,20 +11,37 @@
  */
 class Solution {
 public:
-    void preorder(TreeNode* root, vector<int> &res){
-        if(root== NULL) return;
-        
-        //root-left-right
-        res.push_back(root->val);
-        
-        preorder(root->left, res);
-        preorder(root->right, res);
-    }
-    
     vector<int> preorderTraversal(TreeNode* root) {
+        if(root== NULL) return {};
         vector<int> res;
         
-        preorder(root, res);
+        while(root != NULL){
+            if(root->left == NULL){
+                res.push_back(root->val);
+                root = root->right;
+            } 
+            
+            else{
+                //go to the rightmost guy of the left subtree
+                TreeNode* curr = root->left;
+                while(curr->right && curr->right != root)
+                    curr = curr->right;
+                
+                //if there is not a thread, make it and move to the left
+                if(curr->right == NULL){    
+                    curr->right = root;     //make the thread
+                    res.push_back(root->val);
+                    root = root->left;
+                }
+                
+                //if there is already a thread, remove it, push(root) and move right
+                else{
+                    curr->right = NULL;
+                    root = root->right;
+                } 
+            } 
+        }
+        
         return res;
     }
 };
