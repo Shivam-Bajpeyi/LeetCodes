@@ -12,24 +12,22 @@
 class Solution {
 public:
     TreeNode* insertIntoBST(TreeNode* root, int val) {
-        if(root ==NULL)
-            return new TreeNode(val);
+        if(root==NULL) return new TreeNode(val);
         
-        //when root is bigger take left
-        if(root->left && root->val > val)
-            insertIntoBST(root->left, val);
+        TreeNode* curr = root;
+        TreeNode* prev = root;
+        while(curr){
+            prev = curr;
+            if(curr->val< val)
+                curr = curr->right;
+            else
+                curr = curr->left;
+        }
         
-        //when root is lesser take right
-        if(root->right && root->val< val)
-            insertIntoBST(root->right, val);
-        
-        //if it is placed left, left is null
-        if(!root->left && root->val > val)
-            root->left = new TreeNode(val);
-        
-        //if it is placed right, right is null
-        else if(!root->right && root->val < val)
-            root->right = new TreeNode(val);
+        if(prev->val> val)
+            prev->left = new TreeNode(val);
+        else
+            prev->right = new TreeNode(val);
         
         return root;
     }
