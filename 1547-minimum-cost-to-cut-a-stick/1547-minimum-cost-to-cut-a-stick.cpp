@@ -70,7 +70,6 @@ public:
         //bottom-up
         for(int i=m-2; i>=1; i--){
             for(int j=i; j<=m-2; j++){
-                if(j<i) continue;
                 
                 int mini = INT_MAX;
                 //cuts in (i, j) blobk
