@@ -11,41 +11,48 @@
  */
 class Solution {
 public:
-    TreeNode* reverseOddLevels(TreeNode* root) 
-    {
-        if(!root) return root;
+    TreeNode* reverseOddLevels(TreeNode* root) {
+        if(root==NULL) return root;
         
-        queue<TreeNode*> q;
-        q.push(root);
-        vector<int> ans;
-        int level=0;
+        queue<TreeNode*> que; //to store level
+        que.push(root);
         
-        while(!q.empty())
-        {
-            int s = q.size();
-            vector<int> curr;
-            for(int i=0;i<s;i++)
-            {
-                TreeNode* node = q.front();
-                q.pop();
+        queue<TreeNode*> level_node;
+        stack<int> level_data;
+        
+        //BFS
+        int level = 1;
+        while(!que.empty()){
+            int n = que.size();
+
+            //store level for BFS
+            while(n--){
+                TreeNode* node = que.front();
+                que.pop();
                 
-                if(level%2) node->val = ans[s-i-1];
+                if(node->left) que.push(node->left);
+                if(node->right) que.push(node->right);
                 
-                if(node->left) 
-                {
-                    q.push(node->left);
-                    curr.push_back(node->left->val);
-                }
-                if(node->right) 
-                {
-                    q.push(node->right);
-                    curr.push_back(node->right->val);
-                }
+                //store odd node and their data
+                if(level==1)
+                    level_node.push(node);
+                if(level==0)
+                    level_data.push(node->val); 
             }
             
-            ans = curr;
-            level++;
+            //correct odd level
+            while(level==0 && !level_node.empty()){
+                TreeNode* front = level_node.front();   
+                level_node.pop();
+                
+                // cout<<front->val<<endl;
+                front->left->val = level_data.top(); level_data.pop();
+                front->right->val = level_data.top(); level_data.pop();
+            }
+            
+            level = !level;
         }
+        
         return root;
     }
 };
