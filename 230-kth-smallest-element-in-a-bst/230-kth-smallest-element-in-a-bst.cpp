@@ -17,13 +17,13 @@ public:
         if(root==NULL) return;
         
         //left root right
-        if(root->left) inorder(root->left, k, res); 
+        inorder(root->left, k, res); 
         
         k--;
         if(k==0)
             res = root->val;
             
-        if(root->right) inorder(root->right, k, res);
+        inorder(root->right, k, res);
     }
     
     int kthSmallest(TreeNode* root, int k) {
