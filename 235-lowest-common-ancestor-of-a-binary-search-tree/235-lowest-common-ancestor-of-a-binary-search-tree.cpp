@@ -1,31 +1,16 @@
-/**
- * Definition for a binary tree node.
- * struct TreeNode {
- *     int val;
- *     TreeNode *left;
- *     TreeNode *right;
- *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
- * };
- */
+//use the property of BST, if any one of the node is find then definitely another will be in that subtree and if at any point left and right is in different parts that means root is the LCA.
 
 class Solution {
 public:
     TreeNode* lowestCommonAncestor(TreeNode* root, TreeNode* p, TreeNode* q) {
-        TreeNode* ans = root;
-        while(true){
-        int cur = root->val;
-        if(p->val < cur && q->val < cur)    //go left
-            root = root->left;
+        if(root==p || root==q) return root;
         
-        else if(p->val > cur && q->val > cur) //go right
-            root = root->right;
+        if(root->val> p->val && root->val> q->val)
+            return lowestCommonAncestor(root->left, p, q);
         
-        else{   //any of the two node has matched, return whoever is come first that will be LCA
-            ans = root;
-            break;
-        }
-      }
-        
-        return ans;
+        else if(root->val< p->val && root->val< q->val)
+            return lowestCommonAncestor(root->right, p, q);
+        else
+            return root;
     }
 };
