@@ -9,32 +9,33 @@
  *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
  * };
  */
-//find avg and check avg==node->val O(N^2)
+//use postorder => left-right-root O(N)
 class Solution {
 public:
     int ans = 0;
-    int cnt;
-    int sum(TreeNode* root){
-        if(root==NULL) return 0;
-        cnt++;
-        return root->val+sum(root->left)+sum(root->right);
-    }
     
-    int f(TreeNode* root){
-        if(root==NULL) return 0;
+    pair<int, int> f(TreeNode* root){
+        if(root==NULL) return {0, 0};
+        
+        auto l = f(root->left);
+        int lSum = l.first;
+        int lCnt = l.second;
+        
+        auto r = f(root->right);
+        int rSum = r.first;
+        int rCnt = r.second;
         
         //do the business
-        cnt = 0;
-        if(sum(root)/cnt== root->val)
+        int sum = lSum + rSum + root->val;
+        int cnt = lCnt + rCnt + 1;
+        if(sum/cnt == root->val)
             ans++;
-            
-        f(root->left);
-        f(root->right);
         
-        return ans;
+        return {sum, cnt};
     }
     
     int averageOfSubtree(TreeNode* root) {
-        return f(root);
+        f(root);
+        return ans;
     }
 };
