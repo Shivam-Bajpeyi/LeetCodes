@@ -7,7 +7,7 @@ public:
             int currGcd = 0;
             for (int j = i; j < size(nums); j++)
             {
-                currGcd = __gcd(currGcd, nums[j]);
+                currGcd = gcd(currGcd, nums[j]);
                 if (currGcd == k) cnt++;
             }
         }
