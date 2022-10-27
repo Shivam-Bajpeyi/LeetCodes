@@ -58,6 +58,7 @@ class Trie{
 };
 
 
+//offline queries concept: store elements <=mi in trie, and then find the max xor for ai
 class Solution {
 public:
     vector<int> maximizeXor(vector<int>& nums, vector<vector<int>>& queries) {
