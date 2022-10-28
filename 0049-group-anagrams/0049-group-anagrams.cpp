@@ -1,32 +1,20 @@
+//store all the strings(anagram) corresponds to a sorted word and store all of them 
 class Solution {
 public:
     vector<vector<string>> groupAnagrams(vector<string>& strs) {
-        //make a pair(string, ind)
-        vector<pair<string, int>> strss;
-        for(int i=0; i<strs.size(); i++){
-            strss.push_back({strs[i], i});
+        unordered_map<string, vector<string>> mpp;
+        
+        //store
+        for(string s: strs){
+            string t= s;
+            sort(t.begin(), t.end());
+            mpp[t].push_back(s);            //aet = "eat", "tea", "ate"
         }
         
-        //sort the strings so anagrams will be appear same
-        for(int i=0; i<strss.size(); i++){
-            sort(strss[i].first.begin(), strss[i].first.end());
-        }
-        
-        //group same words in vector<string>
+        //store in ans
         vector<vector<string>> res;
-        for(int i=0; i<strss.size(); i++){
-            vector<string> temp;
-            for(int j=i; j<strss.size(); j++){
-                if(strss[i].first == strss[j].first){
-                    if(strss[j].second == -1) continue;     //already taken
-                    
-                    temp.push_back(strs[strss[j].second]);
-                    strss[j].second = -1;
-                } 
-            }
-            
-            if(temp.size()<=0) continue;
-            res.push_back(temp);
+        for(auto &it: mpp){
+            res.push_back(it.second);
         }
         
         return res;
