@@ -1,24 +1,20 @@
 class Solution {
 public:
     vector<int> dailyTemperatures(vector<int>& temp) {
-        stack<pair<int, int>> st;   //monotonic stack(increasing-> top to down)
         int n = temp.size();
+        stack<int> st;      //monotonic stack
+        vector<int> ans(n, 0);
         
-        st.push({temp[n-1], n-1});        //(73, 7)
-        vector<int> res(temp.size());
-        
-        for(int i=res.size()-2; i>=0; i--){
-            while(!st.empty() && temp[i]>= st.top().first)
-                st.pop();   //pop out smaller values
+        //find Next Greater Element 
+        for(int i=n-1; i>=0; i--){
+            while(!st.empty() && temp[st.top()]<= temp[i]) 
+                st.pop();   //remove days with low temp
             
-            if(st.empty())
-                res[i] = 0;
-            else
-                res[i] = st.top().second- i;        
-                
-            st.push({temp[i], i});
+            if(!st.empty())
+                ans[i] = st.top()- i;
+            st.push(i);
         }
-        
-        return res;
+            
+        return ans;
     }
 };
