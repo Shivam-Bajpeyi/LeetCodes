@@ -1,16 +1,28 @@
 class Solution {
 public:
-    bool dfs(int node, int dest, vector<int> &vis, vector<int> adj[]){
-        vis[node] = 1;
+    bool bfs(int src, int dest, vector<int> &vis, vector<int> adj[]){
+        vis[src] = 1;
+        queue<int> q;
+        q.push(src);
         
-        for(auto &it: adj[node]){
-            if(it == dest)
-                return true;
-            if(vis[it] == -1){
-                if(dfs(it, dest, vis, adj)==true)
-                    return true;
+        while(!q.empty()){
+            int sz = q.size();
+            
+            while(sz--){
+                int node = q.front();
+                q.pop();
+                
+                for(auto &it: adj[node]){
+                    if(it == dest)
+                        return true;
+                    if(vis[it] == -1){
+                        q.push(it);
+                        vis[it] = 1;
+                    }
+                }
             }
         }
+        
         
         return false;
     }
@@ -27,9 +39,8 @@ public:
             adj[it[1]].push_back(it[0]);
         }
         
-        //DFS
+        //BFS
         vector<int> vis(n, -1);
-        
-        return dfs(src, dest, vis, adj);
+        return bfs(src, dest, vis, adj);
     }
 };
