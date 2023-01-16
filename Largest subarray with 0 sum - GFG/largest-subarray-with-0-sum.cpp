@@ -1,37 +1,38 @@
-// { Driver Code Starts
+//{ Driver Code Starts
 //Initial Template for C++
 
 #include <bits/stdc++.h>
 using namespace std;
 
 
- // } Driver Code Ends
+// } Driver Code Ends
 /*You are required to complete this function*/
 
 class Solution{
     public:
-    int maxLen(vector<int>& nums, int n){
-        int mxLen = 0;
-        //store prefix sum with index
+    int maxLen(vector<int>&nums, int n)
+    {   
+        //prefix sum approach
         unordered_map<int, int> mpp;
         mpp[0] = -1;
-        
         int sum = 0;
-        for(int i=0; i<n; i++){
+        
+        int ans = 0;
+        for(int i=0; i<nums.size(); i++){
             sum += nums[i];
-            if(mpp.find(sum) != mpp.end())  //getting same sum, calc mxLen
-                mxLen = max(mxLen, i-mpp[sum]);
-                
+            if(mpp.find(sum)!= mpp.end()){
+                ans = max(ans, i-mpp[sum]);
+            }
             else
-                mpp[sum] = i;    
+                mpp[sum]= i;
         }
         
-        return mxLen;
+        return ans;
     }
 };
 
 
-// { Driver Code Starts.
+//{ Driver Code Starts.
 
 int main()
 {
@@ -52,4 +53,5 @@ int main()
 }
 
 
-  // } Driver Code Ends
+
+// } Driver Code Ends
