@@ -1,4 +1,4 @@
-// { Driver Code Starts
+//{ Driver Code Starts
 #include <bits/stdc++.h>
 
 struct Node{
@@ -89,6 +89,7 @@ int main(void) {
 	}
 	return 0;
 }
+
 // } Driver Code Ends
 
 
@@ -110,48 +111,49 @@ struct Node{
 
 /*  Function which returns the  root of 
     the flattened linked list. */
-Node* merge(Node* root, Node* nxt){
-    Node* curr = (root->data <= nxt->data)? root : nxt;
-    Node* ans = curr;
     
-    Node* left = (curr==root)? root->bottom : root;
-    Node* right = (curr== nxt)? nxt->bottom : nxt;
-        
-    //merge left & right nodes in curr
-    while(left && right){
-        if(left->data<= right->data){
-            curr->bottom = left;
-            curr = curr->bottom;
-            left = left->bottom;
+void merge(Node* root, Node* curr2){
+    Node* curr = root;     //for traversing
+    Node* curr1 = root->bottom;
+    
+    //merge curr1 & curr2 like merge sort
+    while(curr1 && curr2){
+        if(curr1->data <= curr2->data){
+            curr->bottom = curr1;
+            curr1 = curr1->bottom;
         }
         else{
-            curr->bottom = right;
-            curr = curr->bottom;
-            right = right->bottom;   
+            curr->bottom = curr2;
+            curr2 = curr2->bottom;
         }
+        
+        curr = curr->bottom;
     }
-        
-    if(left)
-        curr->bottom = left;
-        
-    if(right)
-        curr->bottom = right;
-
     
-    return ans;
+    //if any list is left to add
+    while(curr1){
+        curr->bottom = curr1;
+        curr = curr->bottom;
+        curr1 = curr1->bottom;
+    }
+    while(curr2){
+        curr->bottom = curr2;
+        curr = curr->bottom;
+        curr2 = curr2->bottom;
+    }
 }
-
+    
 Node *flatten(Node *root)
 {
-    if(root==NULL || root->next==NULL)
-        return root;
-
-    Node* ans = root;
-    while(root->next){
-        ans = merge(ans, root->next);
-        root-> next = root->next->next;
+    if(!root || !root->next) return root;
+    
+    
+    Node* curr = root->next;
+    while(curr){
+       merge(root, curr);
+       curr= curr->next;
     }
-       
-    return ans;
+   
+    return root;
 }
 
