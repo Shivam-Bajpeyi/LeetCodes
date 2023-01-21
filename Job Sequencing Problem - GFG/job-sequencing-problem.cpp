@@ -1,4 +1,4 @@
-// { Driver Code Starts
+//{ Driver Code Starts
 // Program to find the maximum profit job sequence from a given array 
 // of jobs with deadlines and profits 
 #include<bits/stdc++.h>
@@ -13,7 +13,7 @@ struct Job
 }; 
 
 
- // } Driver Code Ends
+// } Driver Code Ends
 /*
 struct Job 
 { 
@@ -30,39 +30,38 @@ class Solution
         return a.profit> b.profit;
     }
     
-    
     //Function to find the maximum profit and the number of jobs done.
     vector<int> JobScheduling(Job arr[], int n) 
     { 
-        //assign jobs first which have maximum profit
-        sort(arr, arr+n, comp);   //acc to max profit
+        //sort by profit(more profit to less profit)
+        sort(arr, arr+n, comp);
         
-        int deadline = arr[0].dead;
+        //-1 means not occupied
+        vector<int> res(n+1, -1);
+        
+        
+        //start assigning tasks
+        long long profit= 0, cnt=0;
         for(int i=0; i<n; i++){
-            deadline = max(deadline, arr[i].dead);
-        }
-        
-        //to keep check of assigning jobs
-        vector<int> check(deadline+1, -1);
-        
-        //time to assign jobs which gives max profit
-        int jobsAssigned =0, totalProfit = 0;
-        for(int i=0; i<n; i++){
-            for(int j=arr[i].dead; j>0; j--){
-                if(check[j] ==-1){   //task can be assigned at this time
-                    check[j] = arr[i].id;
-                    jobsAssigned++;
-                    totalProfit += arr[i].profit;
+            int slot = arr[i].dead;
+            
+            //check from deadline a free slot where this task can be assigned
+            while(slot>0){
+                if(res[slot]==-1){
+                    res[slot] = arr[i].id;
+                    profit += arr[i].profit;
+                    cnt++;
                     break;
                 }
+                slot--;
             }
         }
         
-        return {jobsAssigned, totalProfit};
+        return {cnt, profit};
     } 
 };
 
-// { Driver Code Starts.
+//{ Driver Code Starts.
 // Driver program to test methods 
 int main() 
 { 
@@ -94,4 +93,5 @@ int main()
 }
 
 
-  // } Driver Code Ends
+
+// } Driver Code Ends
