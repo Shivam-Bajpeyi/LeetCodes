@@ -1,32 +1,31 @@
-// { Driver Code Starts
+//{ Driver Code Starts
 #include<bits/stdc++.h> 
 using namespace std; 
 
- // } Driver Code Ends
+// } Driver Code Ends
 class Solution
 {
 public:
-    void f(int ind, int sum, vector<int> &arr, vector<int> &ans){
-        
+    void generate(int ind, vector<int> arr, int sum){
         if(ind<0){
-            ans.push_back(sum);
+            res.push_back(sum);
             return;
         }
-            
         
-        f(ind-1, sum, arr, ans);
-        f(ind-1, sum+arr[ind], arr, ans);
+        //generate all subsets: notpick- pick
+        generate(ind-1, arr, sum);
+        generate(ind-1, arr, sum+arr[ind]);
     }
-
+    
+    vector<int> res;
     vector<int> subsetSums(vector<int> arr, int N)
     {
-       vector<int> ans;
-       f(N-1, 0, arr, ans);
-       return ans;
+        generate(N-1, arr, 0);
+        return res;
     }
 };
 
-// { Driver Code Starts.
+//{ Driver Code Starts.
 int main()
 {
     int t;
@@ -48,4 +47,5 @@ int main()
         cout<<endl;
     }
     return 0;
-}  // } Driver Code Ends
+}
+// } Driver Code Ends
