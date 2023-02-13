@@ -4,7 +4,6 @@ using namespace std;
 
 // } Driver Code Ends
 
-
 class Solution
 {
 	private:
@@ -33,8 +32,15 @@ class Solution
 	
 	public:
 	//Function to find number of strongly connected components in the graph.
-    int kosaraju(int V, vector<int> adj[])
+    int kosaraju(int V, vector<vector<int>> &graph)
     {
+        vector<int> adj[V];
+        for(int i=0; i<V; i++){
+            for(auto &it: graph[i]){
+                adj[i].push_back(it);
+            }
+        }
+        
         //visited
         vector<int> vis(V, -1);
         
@@ -86,7 +92,7 @@ int main()
     	int V, E;
     	cin >> V >> E;
 
-    	vector<int> adj[V];
+    	vector<vector<int>> adj(V);
 
     	for(int i = 0; i < E; i++)
     	{
